@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+message SongInfo {
+  int32 songid = 1; // 104609
+  string title = 2; // "GSK-FM04(OTB2.1)"
+  string artist = 3; // "flap+frog"
+  string album = 4; // "PATCHOULI KNOWLEDGE RACERS (Direct Audio)"
+  string circle = 5; // "flap+frog"
+  int32 duration = 6; // 353
+  string albumart = 7; // "https://gensokyoradio.net/images/albums/500/FFRC-0290_ba6f8efc37.jpg"
+  string year = 8; // ""
+  int32 played = 9; // 15
+  int32 remaining = 10; // 338
+}
