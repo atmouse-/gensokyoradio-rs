@@ -10,10 +10,13 @@ pub struct CacheDir {
 }
 
 async fn fetch_url(url: String, file_name: String) -> Result<(), ()> {
+    // FIXME: unwrap
+    let file_name_tmp = format!("{}.tmp", file_name);
     let response = reqwest::get(url).await.unwrap();
-    let mut file = std::fs::File::create(&file_name).unwrap();
+    let mut file_tmp = std::fs::File::create(&file_name_tmp).unwrap();
     let mut content =  Cursor::new(response.bytes().await.unwrap());
-    std::io::copy(&mut content, &mut file).unwrap();
+    std::io::copy(&mut content, &mut file_tmp).unwrap();
+    std::fs::rename(file_name_tmp, file_name).unwrap();
     Ok(())
 }
 
