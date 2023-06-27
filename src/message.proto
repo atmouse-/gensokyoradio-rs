@@ -12,3 +12,21 @@ message SongInfo {
   int32 played = 9; // 15
   int32 remaining = 10; // 338
 }
+
+message Greeting {
+  string message = 1;
+}
+
+message Welcome {
+  string message = 1;
+  int64 id = 2;
+}
+
+message Ping {
+  string message = 1;
+}
+
+message Pong {
+  string message = 1;
+  int64 id = 2;
+}

@@ -11,7 +11,7 @@ use notify_rust::{Notification, Hint};
 use std::sync::mpsc::channel;
 
 use gensokyoradio::cache::CacheDir;
-use gensokyoradio::message::SongInfo;
+use gensokyoradio::message::{SongInfo, Greeting};
 use gensokyoradio::session::Session;
 use gensokyoradio::session::GensokyoMessage;
 
@@ -53,7 +53,6 @@ async fn main() {
                 let rx = rx_monitor.lock().unwrap();
                 rx.recv()
             } {
-                info!("{:?}", &songinfo);
                 let cache_dir = am_cache_dir.lock().unwrap();
                 let local_file = cache_dir.hash(&songinfo.albumart).unwrap().to_str()
                                     .unwrap()
@@ -75,7 +74,11 @@ async fn main() {
     }
 
 
-    ws_sender.send(Message::from("grInitialConnection")).await.unwrap();
+    let greeting = Message::from(
+        Greeting::default().to_json()
+    );
+    debug!("{}", &greeting);
+    ws_sender.send(greeting).await.unwrap();
     ws_sender.flush().await.unwrap();
 
     loop {
@@ -94,15 +97,20 @@ async fn main() {
                             let hint_tx = hint_tx.clone();
                             match GensokyoMessage::from(msg.to_text().unwrap()).unwrap() {
                                 GensokyoMessage::MessageWelcome(m) => {
+                                    debug!("{}", &m);
                                     let mut session = am_session.lock().unwrap();
                                     session.set_id(m.id);
                                 },
                                 GensokyoMessage::MessagePing(m) => {
+                                    debug!("{}", &m);
                                     let session = am_session.lock().unwrap();
-                                    ws_sender.send(session.gen_pong().unwrap()).await.unwrap();
+                                    let pong = session.gen_pong();
+                                    debug!("{}", &pong);
+                                    ws_sender.send(pong).await.unwrap();
                                     ws_sender.flush().await.unwrap();
                                 },
                                 GensokyoMessage::MessageSongInfo(m) => {
+                                    info!("{:?}", &m);
                                     hint_tx.send(m.clone()).unwrap();
                                 },
                                 GensokyoMessage::MessageUnknown(m) => {
