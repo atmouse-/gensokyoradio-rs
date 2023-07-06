@@ -8,9 +8,10 @@ message SongInfo {
   string circle = 5; // "flap+frog"
   int32 duration = 6; // 353
   string albumart = 7; // "https://gensokyoradio.net/images/albums/500/FFRC-0290_ba6f8efc37.jpg"
-  string year = 8; // ""
-  int32 played = 9; // 15
-  int32 remaining = 10; // 338
+  int32 year = 8; // 2013
+  int32 albumid = 9; // 10278
+  int32 played = 10; // 15
+  int32 remaining = 11; // 338
 }
 
 message Greeting {
